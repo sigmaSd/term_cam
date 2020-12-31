@@ -1,5 +1,5 @@
 use crossterm::{
-    cursor::{Hide, MoveTo, MoveToNextLine, Show},
+    cursor::{Hide, MoveTo, Show},
     style::{Print, SetBackgroundColor},
     terminal::{Clear, EnterAlternateScreen, LeaveAlternateScreen},
 };
@@ -86,14 +86,11 @@ fn main() {
         let mut resizer = resize::new(width / 2, height, w2, h2, RGB24, Lanczos3);
         resizer.resize(&frame, &mut dst);
 
-        dst.chunks(3).enumerate().for_each(|(idx, v)| {
+        dst.chunks(3).for_each(|v| {
             let r = v[0];
             let g = v[1];
             let b = v[2];
 
-            if idx != 0 && idx % w2 == 0 {
-                crossterm::queue!(std::io::stdout(), MoveToNextLine(1)).unwrap();
-            }
             crossterm::queue!(
                 std::io::stdout(),
                 SetBackgroundColor(crossterm::style::Color::Rgb { r, g, b })
